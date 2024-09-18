@@ -1,0 +1,109 @@
+# Default values for dev.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+# Number of replicas for the application pods
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: ""
+# Image settings for the application container
+# For PostgreSQL, this will be overridden by the Bitnami chart dependency
+
+imagePullSecrets: []
+# Secrets to use for pulling container images from private registries
+
+nameOverride: ""
+fullnameOverride: ""
+# Overrides for chart name and fullname
+
+serviceAccount:
+  create: true
+  # Specifies whether a service account should be created
+  automount: true
+  # Automatically mount a ServiceAccount's API credentials?
+  annotations: {}
+  # Annotations to add to the service account
+  name: ""
+  # The name of the service account to use. If empty, a name will be generated
+
+podAnnotations: {}
+podLabels: {}
+# Annotations and labels to add to the pods
+
+podSecurityContext: {}
+securityContext: {}
+# Security settings for the pods and containers
+
+service:
+  type: ClusterIP
+  port: 80
+# Service settings for the application. For PostgreSQL, this will be managed by the Bitnami chart dependency
+# The `port` here is for the application service, not PostgreSQL
+
+ingress:
+  enabled: true
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+# Ingress settings for external access to the service
+# This is not needed for PostgreSQL, so it is set to `false`
+
+resources: {}
+# Resource requests and limits for the application pods
+# Typically set by the user based on their needs
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+# Liveness probe settings for the application
+# This is relevant to the application container, not PostgreSQL
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+# Readiness probe settings for the application
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+# Autoscaling settings for the application
+# This is not required for PostgreSQL
+
+volumes: []
+# Additional volumes for the application pods
+
+volumeMounts: []
+# Additional volume mounts for the application containers
+
+nodeSelector: {}
+# Node selector to constrain the deployment to certain nodes
+
+tolerations: []
+# Tolerations for the application pods
+
+affinity: {}
+# Affinity settings for the application pods
+
+# PostgreSQL settings
+postgresql:
+  postgresqlUsername: admin
+  postgresqlPassword: adminpassword
+  postgresqlDatabase: mydatabase
+  service:
+    type: ClusterIP
+    port: 5432
+# Configuration specific to PostgreSQL
+# This section is used by the Bitnami PostgreSQL chart to configure the PostgreSQL instance
+
